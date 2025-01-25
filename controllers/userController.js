@@ -1,4 +1,4 @@
-import User from '../models/user.js';
+import User from "../models/user.js";
 
 // Register new user
 const registerUser = async (req, res) => {
@@ -14,13 +14,13 @@ const registerUser = async (req, res) => {
 // Login user
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email })
-      .populate('organization')
-      .populate('roles');
-
-    if (!user || !(user.password === password)) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+    const { email, password,app } = req.body;
+    const user = await User.findOne({ email,app })
+      .populate("organization")
+      .populate("roles");
+      console.log(user)
+    if (!user || !(user?.password === password)) {
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     res.status(200).json(user);
@@ -32,9 +32,7 @@ const loginUser = async (req, res) => {
 // Get all users (renamed from getUsers to getAllUsers)
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find()
-      .populate('organization')
-      .populate('roles');
+    const users = await User.find().populate("organization").populate("roles");
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -45,10 +43,10 @@ const getAllUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
-      .populate('organization')
-      .populate('roles');
+      .populate("organization")
+      .populate("roles");
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
     res.status(200).json(user);
   } catch (error) {
@@ -59,14 +57,15 @@ const getUserById = async (req, res) => {
 // Update user (renamed from updateUser to updateUserById)
 const updateUserById = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    ).populate('organization').populate('roles');
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    })
+      .populate("organization")
+      .populate("roles");
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
     res.status(200).json(user);
   } catch (error) {
@@ -79,12 +78,19 @@ const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ message: 'User deleted successfully' });
+    res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-export { registerUser, loginUser, getAllUsers, getUserById, updateUserById, deleteUser };
+export {
+  registerUser,
+  loginUser,
+  getAllUsers,
+  getUserById,
+  updateUserById,
+  deleteUser,
+};
