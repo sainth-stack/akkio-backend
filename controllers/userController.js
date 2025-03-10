@@ -1,5 +1,5 @@
 import User from "../models/user.js";
-
+import Token from "../models/token.js"
 // Register new user
 const registerUser = async (req, res) => {
   try {
@@ -39,6 +39,8 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+
+
 // Get user by ID (implementation stays the same, just renamed export)
 const getUserById = async (req, res) => {
   try {
@@ -53,6 +55,35 @@ const getUserById = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+const getToken = async (req, res) => {
+  try {
+    const token = await Token.findOne({});
+    if (!token) {
+      return res.status(404).json({ message: "Token not found" });
+    }
+    res.status(200).json(token);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateToken = async (req, res) => {
+  console.log(req.body)
+  try {
+    const updatedToken = await Token.findOneAndUpdate(
+      {},
+      { key: req.body.key },
+      { new: true, upsert: true, runValidators: true }
+    );
+
+    res.status(200).json(updatedToken);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
 // Update user (renamed from updateUser to updateUserById)
 const updateUserById = async (req, res) => {
@@ -93,4 +124,6 @@ export {
   getUserById,
   updateUserById,
   deleteUser,
+  getToken,
+  updateToken
 };
