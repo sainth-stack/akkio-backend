@@ -7,13 +7,15 @@ import {
     updateUserById,
     deleteUser,
     updateToken,
-    getToken
+    getToken,
+    googleLogin
 } from '../controllers/userController.js';
 
 const router = express.Router();
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.post('/google_login',googleLogin)
 
 router.get('/users/',  getAllUsers);
 router.get('/user/:id',  getUserById);
