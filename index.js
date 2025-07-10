@@ -13,7 +13,10 @@ import orgRoutes from "./routes/orgRoutes.js";
 const app = express();
 
 // Middleware configuration
-app.use(cors());
+app.use(cors({
+  origin: "*", // Allow all domains
+  credentials: true // Allow cookies and credentials
+}));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
