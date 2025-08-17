@@ -4,6 +4,7 @@ const UserSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
   password: String,
+  userName: String,
   app:String,
   organization: { type: mongoose.Schema.Types.ObjectId, ref: 'Organization' },
   roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
